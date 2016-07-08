@@ -1,0 +1,1178 @@
+swagger: '2.0'
+info:
+  version: 0.20.0.0
+  title: XMS.Accounts.API
+  description: Beeline XMS Accounts API
+host: 'dev.sfld.xms-connect.com:443'
+schemes:
+  - https
+paths:
+  /accounts:
+    post:
+      tags:
+        - Account
+      summary: Once invitation is received by Professional the schema provided below will allow the Professional to create a new user account.
+      operationId: Account_CreateAccount
+      consumes:
+        - application/json
+        - text/json
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: account
+          in: body
+          description: The account data
+          required: true
+          schema:
+            $ref: '#/definitions/AccountModel'
+      responses:
+        '201':
+          description: The created account data
+          schema:
+            $ref: '#/definitions/ApiResponse[AccountModel]'
+      deprecated: false
+  '/accounts/import/{accountId}':
+    post:
+      tags:
+        - Account
+      summary: The Professional can import profile data from an existing account identifier by using the schema below.
+      operationId: Account_ImportAccount
+      consumes:
+        - application/json
+        - text/json
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: account
+          in: body
+          description: The account data
+          required: true
+          schema:
+            $ref: '#/definitions/AccountImportModel'
+        - name: accountId
+          in: path
+          description: >-
+            The account identifier to import.  This will be used instead of
+            creating a new identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  /accounts/all:
+    get:
+      tags:
+        - Account
+      summary: All accounts created by Professional will be listed using the following schema.
+      operationId: Account_ListAccounts
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: paged.skip
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: paged.take
+          in: query
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: the accounts
+          schema:
+            $ref: '#/definitions/ApiListResponse[AccountModel]'
+      deprecated: false
+  '/accounts/{accountId}':
+    get:
+      tags:
+        - Account
+      summary: Account identifier to Get current account information.
+      operationId: Account_GetAccount
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponse[PrivateAccountModel]'
+      deprecated: false
+    put:
+      tags:
+        - Account
+      summary: Updates account with data input from Professional.
+      operationId: Account_UpdateAccount
+      consumes:
+        - application/json
+        - text/json
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The account identifier
+          required: true
+          type: string
+        - name: account
+          in: body
+          description: The updated account data
+          required: true
+          schema:
+            $ref: '#/definitions/AccountModel'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  '/accounts/{accountId}/public':
+    get:
+      tags:
+        - Account
+      summary:  Authorized API calls made by using the Professional account's credentials to request an access from OAuth server and Gets the public view of the account.
+      operationId: Account_GetPublic
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponse[PublicAccountModel]'
+      deprecated: false
+  '/accounts/{accountId}/enable':
+    put:
+      tags:
+        - Account
+      summary: Enables an account to update query when changes are made by Professional.
+      operationId: Account_EnableAccount
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  '/accounts/{accountId}/disable':
+    put:
+      tags:
+        - Account
+      summary: Disables an account to update when query changes are made by Professional.
+      operationId: Account_DisableAccount
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  '/accounts/{accountId}/buyer':
+    get:
+      tags:
+        - Buyer
+      summary: API request sent to Get the buyer role OAuth information.
+      operationId: Buyer_GetBuyer
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponse[BuyerModel]'
+      deprecated: false
+    put:
+      tags:
+        - Buyer
+      summary: >-
+        Once authentication is completed, schema then updates a buyer role.  If the account is not yet a buyer, or new buyer account, will add the buyer role to the account.
+      operationId: Buyer_UpdateBuyer
+      consumes:
+        - application/json
+        - text/json
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The account identifier
+          required: true
+          type: string
+        - name: buyerModel
+          in: body
+          description: The buyer role information
+          required: true
+          schema:
+            $ref: '#/definitions/BuyerModel'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+    delete:
+      tags:
+        - Buyer
+      summary: If the Buyer role changes or the Buyer account needs to be deleted, schema will remove the Buyer Role.
+      operationId: Buyer_RemoveBuyerRole
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The account id.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  '/accounts/{accountId}/buyer/payment-provider':
+    get:
+      tags:
+        - Buyer
+      summary: List the current payment provider agreements authorized for buyer account.
+      operationId: Buyer_ListPaymentProviderAgreement
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiListResponse[PaymentProviderAgreementModel]'
+      deprecated: false
+    post:
+      tags:
+        - Buyer
+      summary: Associates a payment provider account with a buyer role.
+      operationId: Buyer_AddPaymentProviderAgreement
+      consumes:
+        - application/json
+        - text/json
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The buyer role's account identifier
+          required: true
+          type: string
+        - name: paymentProviderAgreement
+          in: body
+          description: The payment provider information
+          required: true
+          schema:
+            $ref: '#/definitions/PaymentProviderAgreementModel'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  '/accounts/{accountId}/buyer/payment-provider/{paymentProviderAccountId}':
+    delete:
+      tags:
+        - Buyer
+      summary: Once payment provider becomes obsolete, it is removed and no longer associated with buyers account.
+      operationId: Buyer_DeletePaymentProvider
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The buyer role's account identifier
+          required: true
+          type: string
+        - name: paymentProviderAccountId
+          in: path
+          description: The associated payment provider to remove
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  '/accounts/{accountId}/buyer/talent-referrer-discount/enable':
+    put:
+      tags:
+        - Buyer
+      summary: Enables talent-referrer to receive discount if applicable.
+      operationId: Buyer_TalentReferrerDiscountEnabled
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The buyer role's account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  '/accounts/{accountId}/buyer/talent-referrer-discount/disable':
+    put:
+      tags:
+        - Buyer
+      summary: Disables a talent referrer discount if applicable
+      operationId: Buyer_TalentReferrerDiscountDisable
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The buyer role's account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  '/accounts/{accountId}/payment-provider':
+    get:
+      tags:
+        - PaymentProvider
+      summary: Gets the payment provider role information for an account
+      operationId: PaymentProvider_GetPaymentProvider
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The payment provider's account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponse[PaymentProviderModel]'
+      deprecated: false
+    put:
+      tags:
+        - PaymentProvider
+      summary: Adds the Payment Provider role to an account based upon the buyer's role.
+      operationId: PaymentProvider_UpsertPaymentProvider
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The Payment Provider's account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+    delete:
+      tags:
+        - PaymentProvider
+      summary: Updates and remove the Payment Provider Role.
+      operationId: PaymentProvider_RemovePaymentProvider
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: accountId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  '/accounts/{accountId}/talent-referrer':
+    get:
+      tags:
+        - TalentReferrer
+      summary: Updates and retrieve profile information from the Talent Referrer role information for an account.
+      operationId: TalentReferrer_GetTalentReferrer
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The Talent Referrer's account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponse[TalentReferrerModel]'
+      deprecated: false
+    put:
+      tags:
+        - TalentReferrer
+      summary: Updates or adds the Talent Referrer role to an account
+      operationId: TalentReferrer_UpsertTalentReferrer
+      consumes:
+        - application/json
+        - text/json
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The Talent Referrer's account identifier
+          required: true
+          type: string
+        - name: talentReferrer
+          in: body
+          description: The Talent Referrer's information
+          required: true
+          schema:
+            $ref: '#/definitions/TalentReferrerModel'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+    delete:
+      tags:
+        - TalentReferrer
+      summary: Update or removes the Talent Referrer.
+      operationId: TalentReferrer_RemoveTalentReferrer
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The Talent Referrer's account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+  '/accounts/{accountId}/talent-referrer/public':
+    get:
+      tags:
+        - TalentReferrer
+      summary: Gets Talent Referrer profile public information.
+      operationId: TalentReferrer_GetPublicTalentReferrer
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The Talent Referrer's account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponse[PublicTalentReferrerModel]'
+      deprecated: false
+  '/accounts/{accountId}/work-platform':
+    get:
+      tags:
+        - WorkPlatform
+      summary: API request configured ID for a specific work platform profile and the schema Gets the information for an account.
+      operationId: WorkPlatform_GetWorkPlatform
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The work platform's account identifier
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponse[WorkPlatformModel]'
+      deprecated: false
+    put:
+      tags:
+        - WorkPlatform
+      summary: Adds or updates the work platform role for an account
+      operationId: WorkPlatform_UpsertWorkPlatform
+      consumes:
+        - application/json
+        - text/json
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The work platform's account identifier
+          required: true
+          type: string
+        - name: workPlatformModel
+          in: body
+          description: The work platform information
+          required: true
+          schema:
+            $ref: '#/definitions/WorkPlatformModel'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+    delete:
+      tags:
+        - WorkPlatform
+      summary: Updates and removes the work platform role.
+      operationId: WorkPlatform_RemoveWorkPlatform
+      consumes: []
+      produces:
+        - application/json
+        - text/json
+      parameters:
+        - name: accountId
+          in: path
+          description: The account Id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Object'
+      deprecated: false
+definitions:
+  AccountModel:
+    description: Account data
+    required:
+      - name
+    type: object
+    properties:
+      name:
+        description: The account name
+        type: string
+      description:
+        description: The account description
+        type: string
+      logo-url:
+        description: A URL to a logo
+        type: string
+      accounts-payable-code:
+        description: The accounts payable code
+        type: string
+  'ApiResponse[AccountModel]':
+    description: Represents an API response
+    type: object
+    properties:
+      id:
+        description: The resource's identifier
+        type: string
+      type:
+        description: The kind of resource
+        type: string
+      data:
+        $ref: '#/definitions/AccountModel'
+        description: The resource data
+      links:
+        description: A collection of links to use for the resource
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
+    example:
+      Id: acc_d9430413sk
+      Type: accounts.private
+      Data:
+        Name: Example Account
+        Description: Description here
+        LogoUrl: 'http://i.nflcdn.com/static/site/7.2/img/teams/DEN/DEN_logo-80x90.gif'
+      Links:
+        - Rel: self
+          Href: 'https://dev.sfld.xms-connect.com/accounts/acc_d9430413sk'
+          Method: GET
+          ResourceId: acc_d9430413sk
+        - Rel: update
+          Href: 'https://dev.sfld.xms-connect.com/accounts/acc_d9430413sk'
+          Method: PUT
+          ResourceId: acc_d9430413sk
+        - Rel: public
+          Href: 'https://dev.sfld.xms-connect.com/accounts/acc_d9430413sk/public'
+          Method: GET
+          ResourceId: acc_d9430413sk
+  ApiLink:
+    description: Represents a link to a resource
+    type: object
+    properties:
+      rel:
+        description: The kind of link
+        type: string
+      href:
+        description: The route to the resource
+        type: string
+      method:
+        description: The Http method to use
+        type: string
+      resource-id:
+        description: >-
+          An optional identifier.  Since XMS is RESTful, please use the Href,
+          not the identifier.
+        type: string
+  AccountImportModel:
+    description: Data for account imports
+    required:
+      - account-key
+      - account-secret-key
+      - name
+    type: object
+    properties:
+      account-key:
+        description: The account oauth key
+        type: string
+      account-secret-key:
+        description: The account oauth secret key
+        type: string
+      name:
+        description: The account name
+        type: string
+      description:
+        description: The account description
+        type: string
+      logo-url:
+        description: A URL to a logo
+        type: string
+      accounts-payable-code:
+        description: The accounts payable code
+        type: string
+  Object:
+    type: object
+    properties: {}
+  Paged:
+    type: object
+    properties:
+      skip:
+        format: int32
+        type: integer
+      take:
+        format: int32
+        type: integer
+  'ApiListResponse[AccountModel]':
+    description: A returned list of resources
+    type: object
+    properties:
+      data:
+        description: The response data
+        type: array
+        items:
+          $ref: '#/definitions/ApiResponse[AccountModel]'
+        readOnly: true
+      links:
+        description: A list of links to use for the list
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
+        readOnly: true
+      total:
+        format: int64
+        description: >-
+          The total number of items in the list.  This value may be more than
+          the Count if we are pagint the results.
+        type: integer
+      count:
+        format: int64
+        description: The current count of items in the list.
+        type: integer
+  'ApiResponse[PrivateAccountModel]':
+    description: Represents an API response
+    type: object
+    properties:
+      id:
+        description: The resource's identifier
+        type: string
+      type:
+        description: The kind of resource
+        type: string
+      data:
+        $ref: '#/definitions/PrivateAccountModel'
+        description: The resource data
+      links:
+        description: A collection of links to use for the resource
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
+  PrivateAccountModel:
+    description: 'Private account information, visible to the account only'
+    type: object
+    properties:
+      name:
+        description: Name
+        type: string
+      description:
+        description: Description
+        type: string
+      enabled:
+        description: Enabled
+        type: boolean
+      authentication-address:
+        description: Authentication Address
+        type: string
+      account-secret-key:
+        description: Account Secret Key
+        type: string
+      account-key:
+        description: Account Key
+        type: string
+      logo-url:
+        description: Logo URL
+        type: string
+      id:
+        description: The Account identifier
+        type: string
+      accounts-payable-code:
+        description: The accounts payable code
+        type: string
+  'ApiResponse[PublicAccountModel]':
+    description: Represents an API response
+    type: object
+    properties:
+      id:
+        description: The resource's identifier
+        type: string
+      type:
+        description: The kind of resource
+        type: string
+      data:
+        $ref: '#/definitions/PublicAccountModel'
+        description: The resource data
+      links:
+        description: A collection of links to use for the resource
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
+  PublicAccountModel:
+    description: 'Public account information, visible to anyone'
+    type: object
+    properties:
+      id:
+        description: The Account identifier
+        type: string
+      description:
+        description: Description
+        type: string
+      name:
+        description: Name
+        type: string
+      logo-url:
+        description: Logo URL
+        type: string
+  BuyerModel:
+    description: Buyer role data
+    required:
+      - web-hook-address
+    type: object
+    properties:
+      web-hook-address:
+        description: The URL to send web hook events
+        type: string
+      external-account-key:
+        description: Account key for web hook events
+        type: string
+      external-account-secret-key:
+        description: Account secret key for web hook events
+        type: string
+      authentication-address:
+        description: Authentication address for web hook events
+        type: string
+      scope:
+        description: OAuth scope for web hook events
+        type: string
+      authentication-header:
+        description: Authentication Header
+        type: string
+      authentication-header-format:
+        description: Authentication Header Format
+        type: string
+      platform-fee-percentage:
+        format: double
+        description: Percentage for the platform fee
+        maximum: 1
+        minimum: 0
+        type: number
+      talent-referrer-discount-percent:
+        format: double
+        description: Talent referrer discount percentage
+        maximum: 1
+        minimum: 0
+        type: number
+  'ApiResponse[BuyerModel]':
+    description: Represents an API response
+    type: object
+    properties:
+      id:
+        description: The resource's identifier
+        type: string
+      type:
+        description: The kind of resource
+        type: string
+      data:
+        $ref: '#/definitions/BuyerModel'
+        description: The resource data
+      links:
+        description: A collection of links to use for the resource
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
+  PaymentProviderAgreementModel:
+    description: >-
+      The Payment Provider Agreement information - links a payment provider to a
+      buyer role
+    required:
+      - payment-provider-id
+      - payrollee-markup-tier-groups
+      - independent-contractor-markup-tier-groups
+      - payrollee-benefit-opt-out-markup-tier-groups
+    type: object
+    properties:
+      payment-provider-id:
+        description: The Payment Provider identifier
+        type: string
+      payrollee-markup-tier-groups:
+        description: Payrollee Markup Tiers
+        type: array
+        items:
+          $ref: '#/definitions/MarkupTierGroupModel'
+      independent-contractor-markup-tier-groups:
+        description: Independent Contractor Markup Tiers
+        type: array
+        items:
+          $ref: '#/definitions/MarkupTierGroupModel'
+      payrollee-benefit-opt-out-markup-tier-groups:
+        description: Payrollee benefit opt out markup tiers
+        type: array
+        items:
+          $ref: '#/definitions/MarkupTierGroupModel'
+  MarkupTierGroupModel:
+    description: ''
+    required:
+      - start-date
+      - tiers
+    type: object
+    properties:
+      start-date:
+        $ref: '#/definitions/DateModel'
+        description: Start date
+      end-date:
+        $ref: '#/definitions/DateModel'
+        description: End date
+      tiers:
+        description: Tiers
+        type: array
+        items:
+          $ref: '#/definitions/MarkupTierModel'
+  DateModel:
+    description: ''
+    type: object
+    properties:
+      year:
+        format: int32
+        description: Year
+        type: integer
+      month:
+        format: int32
+        description: Month
+        type: integer
+      day:
+        format: int32
+        description: Day
+        type: integer
+  MarkupTierModel:
+    description: The markup tier information
+    type: object
+    properties:
+      minimum-pay-rate:
+        format: double
+        description: Minimum Pay Rate
+        type: number
+      maximum-pay-rate:
+        format: double
+        description: Maximum Pay Rate
+        type: number
+      markup-percentage:
+        format: double
+        description: Markup Percentage
+        maximum: 1
+        minimum: 0
+        type: number
+  'ApiListResponse[PaymentProviderAgreementModel]':
+    description: A returned list of resources
+    type: object
+    properties:
+      data:
+        description: The response data
+        type: array
+        items:
+          $ref: '#/definitions/ApiResponse[PaymentProviderAgreementModel]'
+        readOnly: true
+      links:
+        description: A list of links to use for the list
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
+        readOnly: true
+      total:
+        format: int64
+        description: >-
+          The total number of items in the list.  This value may be more than
+          the Count if we are pagint the results.
+        type: integer
+      count:
+        format: int64
+        description: The current count of items in the list.
+        type: integer
+  'ApiResponse[PaymentProviderAgreementModel]':
+    description: Represents an API response
+    type: object
+    properties:
+      id:
+        description: The resource's identifier
+        type: string
+      type:
+        description: The kind of resource
+        type: string
+      data:
+        $ref: '#/definitions/PaymentProviderAgreementModel'
+        description: The resource data
+      links:
+        description: A collection of links to use for the resource
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
+  'ApiResponse[PaymentProviderModel]':
+    description: Represents an API response
+    type: object
+    properties:
+      id:
+        description: The resource's identifier
+        type: string
+      type:
+        description: The kind of resource
+        type: string
+      data:
+        $ref: '#/definitions/PaymentProviderModel'
+        description: The resource data
+      links:
+        description: A collection of links to use for the resource
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
+  PaymentProviderModel:
+    description: Payment Provider role information
+    type: object
+    properties: {}
+  TalentReferrerModel:
+    description: Talent referrer settings
+    type: object
+    properties:
+      royalty-discount-percentage:
+        format: double
+        description: The royalty discount percentage
+        maximum: 1
+        minimum: 0
+        type: number
+      anonymous-invitations:
+        description: >-
+          Controls if the invitations made by this talent referrer are marked
+          anonymous.  Anonymous invitations will say they're
+                      from OnForce (or the work platform), not the talent referrer
+        type: boolean
+  'ApiResponse[TalentReferrerModel]':
+    description: Represents an API response
+    type: object
+    properties:
+      id:
+        description: The resource's identifier
+        type: string
+      type:
+        description: The kind of resource
+        type: string
+      data:
+        $ref: '#/definitions/TalentReferrerModel'
+        description: The resource data
+      links:
+        description: A collection of links to use for the resource
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
+  'ApiResponse[PublicTalentReferrerModel]':
+    description: Represents an API response
+    type: object
+    properties:
+      id:
+        description: The resource's identifier
+        type: string
+      type:
+        description: The kind of resource
+        type: string
+      data:
+        $ref: '#/definitions/PublicTalentReferrerModel'
+        description: The resource data
+      links:
+        description: A collection of links to use for the resource
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
+  PublicTalentReferrerModel:
+    description: 'Public talent referrer information, visible to anyone...'
+    type: object
+    properties:
+      id:
+        description: The Account Identifier
+        type: string
+      description:
+        description: Description
+        type: string
+      name:
+        description: Name
+        type: string
+      anonymous-invitations:
+        description: >-
+          If true, the invitations sent by this talent referrer are intended to
+          be anonymous
+        type: boolean
+  WorkPlatformModel:
+    description: Work Platform role information
+    required:
+      - web-hook-address
+    type: object
+    properties:
+      web-hook-address:
+        description: >-
+          The web hook event endpoint to call when there is a work platform
+          event
+        type: string
+      external-account-key:
+        description: External account key for web hook events
+        type: string
+      external-account-secret-key:
+        description: External account secret key for web hook events
+        type: string
+      authentication-address:
+        description: Authentication Address for web hook events
+        type: string
+      authentication-header:
+        description: Authentication Header for web hook events
+        type: string
+      authentication-header-format:
+        description: Authentication Header Format for web hook events
+        type: string
+      scope:
+        description: OAuth scope for web hook events
+        type: string
+  'ApiResponse[WorkPlatformModel]':
+    description: Represents an API response
+    type: object
+    properties:
+      id:
+        description: The resource's identifier
+        type: string
+      type:
+        description: The kind of resource
+        type: string
+      data:
+        $ref: '#/definitions/WorkPlatformModel'
+        description: The resource data
+      links:
+        description: A collection of links to use for the resource
+        type: array
+        items:
+          $ref: '#/definitions/ApiLink'
